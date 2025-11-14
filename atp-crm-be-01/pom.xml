@@ -38,6 +38,7 @@
 		<module>auth-sso</module>
 		<module>api-gateway-sso</module>
 		<module>setting</module>
+		<module>central-config</module>
 	</modules>
 	<dependencies>
 		<dependency>
