@@ -1,0 +1,5 @@
+
+export const modalStateKey = {
+    GENERAL_CODE_LIST: "GENERAL_CODE_LIST",
+    COMMON_CODE_CREATION: "COMMON_CODE_CREATION"
+}

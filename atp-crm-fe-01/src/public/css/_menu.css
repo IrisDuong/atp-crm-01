@@ -1,0 +1,22 @@
+
+.main-nav{
+  background-color: none;
+}
+.ant-menu-light{
+  background: inherit;
+}
+.ant-menu-submenu .ant-menu-title-content,
+  .ant-menu-item  .ant-menu-title-content {
+    text-align: left;
+  }
+.menu-icon{
+  padding: 0 20px;
+}
+.menu-label a:not(:hover){
+    color: #2a5162;
+    font-size: 16px;
+    font-weight: 400;
+}
+.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline{
+  background: none;
+}

@@ -1,0 +1,76 @@
+
+/* .sso-login-container header img{
+    width: 20%;
+    height: 50%;
+} */
+
+.login-container >div{
+  background-color: #ffffff;
+  padding: 20px;
+ }
+
+.login-container .login-intro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.login-container .login-intro header{
+  background-color: #ffffff;
+}
+.login-container .login-intro header img{
+  width: 150px;
+  height: auto;
+}
+.login-container .login-area{
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 13px;
+}
+.login-container .login-area .qr-container, .login-intro {
+  /* box-shadow: none; */
+  background: none;
+  border: none;
+}
+.login-container .login-area .qr-container .ant-card-cover{
+  display: flex;
+  justify-content: center;
+}
+.login-container .login-area button{
+    width: 100%;
+    color: #1e2221;
+    border: 1px solid #2e2e2a;
+    padding: 23px 20px;
+    font-size: 23px;
+}
+/* .sso-login-card header {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25%;
+    padding: 0px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 95%;
+    margin: 0 10px;
+    border-right: 1px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+}
+.sso-login-card header h4{
+    margin: 0;
+    padding: 12px 10px;
+    background-color: #2fb8d5;
+    border-radius: 20px;
+    color: #ffffff;
+    margin-left: 20px;
+}
+.sso-login-card main button {
+    color: #34494e;
+    height: 50px;
+    font-size: 20px;
+    padding: 33px;
+    background: #ffffff;
+    border: none
+} */

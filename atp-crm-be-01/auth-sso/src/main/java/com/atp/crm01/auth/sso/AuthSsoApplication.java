@@ -1,0 +1,16 @@
+package com.atp.crm01.auth.sso;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.atp.crm01.auth.sso","com.atp.crm01.common.exception","com.atp.crm01.account"})
+@EnableDiscoveryClient
+public class AuthSsoApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(AuthSsoApplication.class, args);
+	}
+
+}

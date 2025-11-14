@@ -1,0 +1,9 @@
+target/
+build/
+*.iml
+.idea/
+.gradle/
+.mvn/
+logs/
+node_modules/
+.env

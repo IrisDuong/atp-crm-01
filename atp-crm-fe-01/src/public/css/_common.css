@@ -1,0 +1,10 @@
+header{
+    background: none;
+}
+.home .right{
+    padding: 24px;
+}
+.home .left{
+    background-color: rgb(247, 246, 244);
+    border-radius: 15px;
+}
