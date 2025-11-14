@@ -44,6 +44,10 @@
 			<groupId>com.atp.crm01.common</groupId>
 			<artifactId>common-utils</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
 		<!--
 		
 		<dependency>
