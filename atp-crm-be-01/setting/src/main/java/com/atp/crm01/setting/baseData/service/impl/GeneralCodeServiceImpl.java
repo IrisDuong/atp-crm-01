@@ -23,7 +23,7 @@ import com.atp.crm01.setting.baseData.dto.GeneralCodeRequestDTO;
 import com.atp.crm01.setting.baseData.dto.GeneralCodeResponseDTO;
 import com.atp.crm01.setting.baseData.entity.CommonCode;
 import com.atp.crm01.setting.baseData.entity.GeneralCode;
-import com.atp.crm01.setting.baseData.entity.GeneralCodePK;
+import com.atp.crm01.setting.baseData.entity.GeneralCodeID;
 import com.atp.crm01.setting.baseData.repo.CommonCodeRepo;
 import com.atp.crm01.setting.baseData.repo.GeneralCodeRepo;
 import com.atp.crm01.setting.baseData.service.GeneralCodeService;
@@ -57,12 +57,14 @@ public class GeneralCodeServiceImpl implements GeneralCodeService{
 					.orElseThrow(()-> new DataNotFoundException("Common code not found"));
 
 			boolean isTree = false;
-			Integer treeHierLevel = null;
-			if(BaseCodeTypeEnums.TREE.getcodeTypeNo().equals(ownerCommonCode.getCodeTypeNo()))
+			Integer treeLevel = null;
+			if(BaseCodeTypeEnums.TREE.getcodeTypeNo().equals(ownerCommonCode.getCodeTypeNo())) {
 				isTree = true;
-			    treeHierLevel = 1;
+			    treeLevel = 1;
+			}
 			
-			this.buildGeneralCode(param,ownerCommonCode,null,isTree,treeHierLevel);
+			GeneralCode rootGeneralCode = this.buildGeneralCode(param,ownerCommonCode,null,isTree,treeLevel);
+			param.getChildren().forEach(item-> this.buildGeneralCode(item,ownerCommonCode,rootGeneralCode,false,2));
 			return true;
 		} catch (Exception e) {
 			log.error("[GeneralCodeServiceImpl] - create SINGLE  general code failed");
@@ -73,43 +75,37 @@ public class GeneralCodeServiceImpl implements GeneralCodeService{
 	/**
 	 * Build single general code from request param
 	 */
-	private void buildGeneralCode(GeneralCodeRequestDTO param, CommonCode ownerCommonCode, GeneralCode parentGeneralCode,boolean isTree,int treeHierLevel) {
+	private GeneralCode buildGeneralCode(GeneralCodeRequestDTO param, CommonCode ownerCommonCode, GeneralCode parentGeneralCode,boolean isTree,int treeLevel) {
 		
-//		//  Create locale input code for multi-language
-//		if(param.getGeneralCodeNo() > 0) {
-//			// delete existed list locale input code
-//			List<LocaleInputCodePK> existedLocaleInputCodeIds = param.getLocaleInputCodes().stream()
-//					.map(item-> new LocaleInputCodePK(item.getLangCode(), item.getLocaleCodeNo())).toList();
-//			localeInputCodeService.deleteByIds(existedLocaleInputCodeIds);
-//		}
-//		List<LocaleInputCode> newLocaleInputCodes = param.getLocaleInputCodes().stream().map(localeInputCodeService::buildEntityFromDto).toList();
-//		localeInputCodeService.saveListLocaleInputCode(new ArrayList<>(newLocaleInputCodes));
-//
-//
-//		// find max general code and create new
-//		Integer maxGeneralCodeNo = generalCodeRepo.findMaxGeneralcode(param.getCommonCodeNo(),param.getFeatureCodeNo(), BaseUseStatusEnums.USE.getUseStatusNo());
-//		GeneralCode generalCode = new GeneralCode();
-//		generalCode.setId(new GeneralCodePK(ownerCommonCode.getCommonCodeNo(), (CommonUtils.getDefaultNumber(maxGeneralCodeNo,0)+1)));
-//		generalCode.setFeatureCodeNo(param.getFeatureCodeNo());
-//		generalCode.setCodeTypeNo(param.getCodeTypeNo());
-//		generalCode.setUseStatusNo(param.getUseStatusNo());
-//		generalCode.setLocaleCodeNo(newLocaleInputCodes.get(0).getId().getLocaleCodeNo());
-//		generalCode.setOwnerCommonCode(ownerCommonCode);
-//		generalCode.setTree(isTree);
-//		generalCode.setParentGeneralCode(parentGeneralCode);
-//		generalCode.setTreeHierLevel(treeHierLevel);
-//
-//		if(isTree && CommonUtils.isEmptyData(parentGeneralCode)) {
-//			// keep  generalcode (treeHierLevel = 1) be as parent of list
-//			parentGeneralCode = generalCode;
-//		}
-//		
-//		// loop dto which is list child and insert
-//		for(GeneralCodeRequestDTO item:param.getChildren()) {
-//			this.buildGeneralCode(item, ownerCommonCode,parentGeneralCode, false,2);
-//		}
-//		
-//		generalCodeRepo.save(generalCode);
+		//  Create locale input code for multi-language
+		if(param.getGeneralCodeNo() > 0) {
+			// delete all locale before create new all to void complicate
+			List<LocaleInputCodePK> existedLocaleInputCodeIds = param.getLocaleInputCodes().stream()
+					.map(item-> new LocaleInputCodePK(item.getLangCode(), item.getLocaleCodeNo())).toList();
+			localeInputCodeService.deleteByIds(existedLocaleInputCodeIds);
+		}
+		List<LocaleInputCode> newLocaleInputCodes = param.getLocaleInputCodes().stream().map(localeInputCodeService::buildEntityFromDto).toList();
+		localeInputCodeService.saveListLocaleInputCode(new ArrayList<>(newLocaleInputCodes));
+
+
+		// find max general code and create new
+		Integer maxGeneralCodeNo = generalCodeRepo.findMaxGeneralcode(param.getCommonCodeNo(),param.getFeatureCodeNo(), BaseUseStatusEnums.USE.getUseStatusNo());
+		GeneralCode generalCode = new GeneralCode();
+		generalCode.setId(GeneralCodeID.builder()
+				.commonCodeNo(ownerCommonCode.getCommonCodeNo())
+				.generalCodeNo(CommonUtils.getDefaultNumber(maxGeneralCodeNo, 0)+1)
+				.build()
+		);
+		generalCode.setFeatureCodeNo(param.getFeatureCodeNo());
+		generalCode.setCodeTypeNo(param.getCodeTypeNo());
+		generalCode.setUseStatusNo(param.getUseStatusNo());
+		generalCode.setLocaleCodeNo(newLocaleInputCodes.get(0).getId().getLocaleCodeNo());
+		generalCode.setOwnerCommonCode(ownerCommonCode);
+		generalCode.setTree(isTree);
+		generalCode.setParent(parentGeneralCode);
+		generalCode.setTreeLevel(treeLevel);
+		
+		return generalCodeRepo.save(generalCode);
 	}
 
 	/**

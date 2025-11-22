@@ -11,9 +11,9 @@ import org.springframework.data.repository.query.Param;
 import com.atp.crm01.setting.baseData.dto.GeneralCodeRequestDTO;
 import com.atp.crm01.setting.baseData.dto.GeneralCodeResponseDTO;
 import com.atp.crm01.setting.baseData.entity.GeneralCode;
-import com.atp.crm01.setting.baseData.entity.GeneralCodePK;
+import com.atp.crm01.setting.baseData.entity.GeneralCodeID;
 
-public interface GeneralCodeRepo extends JpaRepository<GeneralCode, GeneralCodePK>{
+public interface GeneralCodeRepo extends JpaRepository<GeneralCode, GeneralCodeID>{
 
 	@Query("SELECT new com.atp.crm01.setting.baseData.dto.GeneralCodeResponseDTO"
 			+ "(G.id.commonCodeNo,G.id.generalCodeNo,G.featureCodeNo,G.codeTypeNo,G.useStatusNo,G.localeCodeNo,G.isTree)"

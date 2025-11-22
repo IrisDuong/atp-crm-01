@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GeneralCodePK implements Serializable{
+public class GeneralCodeID implements Serializable{
 
 	/**
 	 * 
@@ -29,8 +29,8 @@ public class GeneralCodePK implements Serializable{
 	@Override
 	public boolean equals(Object obj) {
 		if(this == obj) return true;
-		if(!(obj instanceof GeneralCodePK)) return false;
-		GeneralCodePK primaryKey = (GeneralCodePK) obj;
+		if(!(obj instanceof GeneralCodeID)) return false;
+		GeneralCodeID primaryKey = (GeneralCodeID) obj;
 		return Objects.equals(commonCodeNo,primaryKey.commonCodeNo)
 				&& Objects.equals(generalCodeNo,primaryKey.generalCodeNo);
 	}
