@@ -1,4 +1,4 @@
-package com.atp.crm01.gateway.sso.config;
+package com.atp.crm01.gateway.config;
 
 import java.util.Arrays;
 

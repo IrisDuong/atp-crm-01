@@ -1,4 +1,4 @@
-package com.atp.crm01.gateway.sso;
+package com.atp.crm01.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

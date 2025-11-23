@@ -7,8 +7,8 @@
 		<artifactId>atp-crm-be-01</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.atp.crm01.gateway.sso</groupId>
-	<artifactId>api-gateway-sso</artifactId>
+	<groupId>com.atp.crm01.gateway</groupId>
+	<artifactId>api-gateway</artifactId>
 	<name>api-gateway-sso</name>
 
 	<url />
