@@ -1,8 +1,8 @@
 server.port=9001
 # DB CONNECTION - MYSQL
-spring.datasource.url=jdbc:mysql://${MYSQL_DB_SERVER}:3306/${MYSQL_DB_NAME}?createDatabaseIfNotExist=true
-spring.datasource.username=${MYSQL_DB_USER}
-spring.datasource.password=${MYSQL_DB_PWD} 
+spring.datasource.url=jdbc:mysql://localhost:3306/atpcrm01-setting?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=12345
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 spring.jpa.properties.hibernate.format_sql=true

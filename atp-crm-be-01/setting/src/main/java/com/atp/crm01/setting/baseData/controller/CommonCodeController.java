@@ -3,6 +3,8 @@ package com.atp.crm01.setting.baseData.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class CommonCodeController {
+//	private final Logger log = LoggerFactory.getLogger(CommonCodeController.class);
+	
 	private final CommonCodeService commonCodeService;
 	
 	@PostMapping("/create")
@@ -47,7 +51,7 @@ public class CommonCodeController {
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			dataResponse = ApiUtils.buildApiResponse(null, httpStatus, "Create list common code failed !") ;
 		}
-		log.debug("[COMMON-CODE-CONTROLLER] - createCommonCode :: {} !",dataResponse.message());
+		log.info("[COMMON-CODE-CONTROLLER] - createCommonCode :: {} !",dataResponse.message());
 		return new ResponseEntity<>(dataResponse, httpStatus);
 	}
 	
@@ -58,7 +62,7 @@ public class CommonCodeController {
 			throw new DataNotFoundException("No data");
 		
 		ApiResponse<?> dataResponse = ApiUtils.buildApiResponse(result, HttpStatus.OK, "Get list general code successfully !") ;
-		log.debug("[COMMON-CODE-CONTROLLER] - createCommonCode :: {} !",dataResponse.message());
+		log.info("[COMMON-CODE-CONTROLLER] - createCommonCode :: {} !",dataResponse.message());
 		return new ResponseEntity<>(dataResponse, HttpStatus.OK);
 	}
 }

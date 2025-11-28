@@ -39,6 +39,7 @@
 		<module>api-gateway-sso</module>
 		<module>setting</module>
 		<module>central-config</module>
+		<module>api-gateway</module>
 	</modules>
 	<dependencies>
 		<dependency>
