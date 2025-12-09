@@ -18,9 +18,9 @@ public interface GeneralCodeRepo extends JpaRepository<GeneralCode, GeneralCodeI
 	@Query("SELECT new com.atp.crm01.setting.baseData.dto.GeneralCodeResponseDTO"
 			+ "(G.id.commonCodeNo,G.id.generalCodeNo,G.featureCodeNo,G.codeTypeNo,G.useStatusNo,G.localeCodeNo,G.isTree)"
 			+ " FROM GeneralCode G"
-			+ " WHERE G.id.commonCodeNo = :#{#param.commonCodeNo} AND G.featureCodeNo = :#{#param.featureCodeNo} AND G.useStatusNo = :#{#param.useStatusNo}"
+			+ " WHERE G.id.commonCodeNo = :commonCodeNo AND G.featureCodeNo = :featureCodeNo AND G.useStatusNo = :useStatusNo"
 			+ " ORDER BY G.id.generalCodeNo ASC")
-	List<GeneralCodeResponseDTO> getListGeneralByCommonCode(@Param("param") GeneralCodeRequestDTO param);
+	List<GeneralCodeResponseDTO> getListGeneralByCommonCode(int commonCodeNo,String featureCodeNo,String useStatusNo);
 	
 	@Query("SELECT COALESCE(MAX(G.id.generalCodeNo),0) FROM GeneralCode G"
 			+ " WHERE G.id.commonCodeNo = :commonCodeNo"

@@ -116,7 +116,7 @@ public class GeneralCodeServiceImpl implements GeneralCodeService{
 	public List<GeneralCodeResponseDTO> getListGeneralByCommonCode(GeneralCodeRequestDTO param) {
 		try {
 
-			List<GeneralCodeResponseDTO> dataResult = generalCodeRepo.getListGeneralByCommonCode(param);
+			List<GeneralCodeResponseDTO> dataResult = generalCodeRepo.getListGeneralByCommonCode(param.getCommonCodeNo(), param.getFeatureCodeNo(), BaseUseStatusEnums.USE.getUseStatusNo());
 			
 			List<Integer> localeCodeParams = dataResult.stream()
 					.map(GeneralCodeResponseDTO::getLocaleCodeNo).toList();
