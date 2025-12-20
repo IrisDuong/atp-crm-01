@@ -32,7 +32,6 @@ public class GatewayConfig {
             "Authorization", "Content-Type", "Content-Disposition",
             "X-Requested-With", "X-User-Authenticated", "X-User-Id"
         ));
-        corsConfig.setAllowCredentials(true);
         corsConfig.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -52,13 +51,6 @@ public class GatewayConfig {
 						 )
 						.uri("lb://auth-sso")
 				)
-				.route("ACCOUNT-SERVICE", r-> r
-						.path("/account-mgt/**")
-						.filters(f-> f
-								.stripPrefix(1)
-						 )
-						.uri("lb://account")
-				)
 				.route("SETTING-SERVICE", r-> r
 						.path("/setting-mgt/**")
 						.filters(f-> f
@@ -66,17 +58,6 @@ public class GatewayConfig {
 						)
 						.uri("lb://setting")
 				)
-				.route("FE", r-> r
-						.path("/")
-						.filters(f-> f
-								.stripPrefix(1)
-						 )
-						.uri("http://localhost:3000")
-				).route("public-routes", r -> r
-	                    .path("/", "/public/**", "/static/**", "/favicon.ico")
-	                    .uri("http://localhost:3000")
-	                )
-
                 .build();
 	}
 }

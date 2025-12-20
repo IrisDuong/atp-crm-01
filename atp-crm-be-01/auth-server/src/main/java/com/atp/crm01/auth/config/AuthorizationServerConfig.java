@@ -1,0 +1,109 @@
+package com.atp.crm01.auth.config;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Configuration
+@Slf4j
+public class AuthorizationServerConfig {
+
+	
+	@Value("${app.host.auth-server}")
+	private String authServerHost;
+	
+	@Value("${app.host.authserver}")
+	private String gatewayHost;
+	
+	@Value("${sec.oauth2.gateway.client_id}")
+	private String gatewayClientId;
+
+	@Value("${sec.oauth2.gateway.client_secret}")
+	private String gatewayClientSecret;
+	
+	@Value("${sec.oauth2.client.gateway.at.ttl}")
+	private long gatewayAccessTokenTtl;
+	
+	@Value("${sec.oauth2.client.gateway.rt.ttl}")
+	private long gatewayRefreshTokenTtl;
+	
+
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public RegisteredClientRepository registeredClientRepository() {
+		RegisteredClient gatewayClient = RegisteredClient.withId(gatewayClientId)
+				.clientId(gatewayClientId)
+				.clientSecret(passwordEncoder().encode(gatewayClientSecret))
+				.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+				.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+				.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+				.redirectUri(gatewayHost+"/login/oauth2/code/"+gatewayClientId)
+				.scope(OidcScopes.OPENID)
+				.scope("email")
+				.scope("profile")
+				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
+				.tokenSettings(TokenSettings.builder()
+						.accessTokenTimeToLive(Duration.ofMillis(gatewayAccessTokenTtl))
+						.refreshTokenTimeToLive(Duration.ofMillis(gatewayRefreshTokenTtl))
+						.build()
+				).build();
+		return new InMemoryRegisteredClientRepository(gatewayClient);
+	}
+	
+	@Bean
+	public JWKSource<SecurityContext> genKeys() {
+		KeyPair keyPair;
+		try {
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+			keyPairGenerator.initialize(2048);
+			keyPair = keyPairGenerator.generateKeyPair();
+			
+			RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+			RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+			
+			RSAKey rsaKey = new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(UUID.randomUUID().toString()).build();
+			JWKSet jwkSet = new JWKSet(rsaKey);
+//			return new ImmutableJWKSet<SecurityContext>(jwkSet);
+			return (jwtSelector, context)->jwtSelector.select(jwkSet);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@Bean
+	public AuthorizationServerSettings authorizationServerConfig() {
+		AuthorizationServerSettings settings = AuthorizationServerSettings.builder()
+				.issuer(authServerHost).build();
+		return settings;
+	}
+}
