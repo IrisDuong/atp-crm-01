@@ -1,0 +1,18 @@
+server.port=${PORT_AUTH_SERVER}
+#port
+app.host.main=${MAIN_HOST}
+app.host.auth-server=${MAIN_HOST}:${PORT_AUTH_SERVER}
+app.host.gateway=${MAIN_HOST}:${PORT_GATEWAY}
+
+# oauth2 client registration
+sec.oauth2.client.google.client_id=${GOOGLE_CLIENT_ID}
+sec.oauth2.client.google.client_secret=${GOOGLE_CLIENT_SECRET}
+sec.oauth2.client.gateway.client_id=${GATEWAY_CLIENT_ID}
+sec.oauth2.client.gateway.client_secret=${GATEWAY_CLIENT_SECRET}
+sec.oauth2.client.gateway.at.ttl=900000
+sec.oauth2.client.gateway.rt.ttl=300000
+spring.security.oauth2.client.registration.google.client-id=${sec.oauth2.client.google.client_id}
+spring.security.oauth2.client.registration.google.client-secret=${sec.oauth2.client.google.client_secret}
+spring.security.oauth2.client.registration.google.redirect-uri=${app.host.auth-server}/login/oauth2/code/google
+spring.security.oauth2.client.registration.google.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.google.scope=openid,profile,email

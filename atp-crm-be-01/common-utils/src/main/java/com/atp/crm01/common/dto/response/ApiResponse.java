@@ -5,6 +5,6 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 
 @Builder
-public record ApiResponse<T>(String message,T data,int httpStatusCode,LocalDateTime timeStamp) {
+public record ApiResponse<T>(String message,T data,int httpStatusCode,String timeStamp) {
 
 }

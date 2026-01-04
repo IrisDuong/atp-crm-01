@@ -1,8 +1,50 @@
-#main-header{
-      background: rgb(255, 255, 255);
+
+.main-header{
+    background: rgb(255, 255, 255);
     padding: 0px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ededed;
+}
+.main-header .header-icon-container{
+  cursor: pointer;
+  padding-right: 120px;
+  margin-top: 15px;
+}
+.main-header .header-icon-container div > span{
+  padding-left: 55px;
+}
+.main-header .header-icon-container .header-icon{
+  font-size: 23px;
+}
+
+.main-header .authen-profile-container >div{
+    gap: 10px;
+    cursor: pointer;
+    background-color: #f3f3f3;
+    padding: 6px 15px;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    border-radius: 9px;
+}
+
+.main-header .authen-profile-container .ant-avatar{
+  background-color: rgb(65, 89, 133);
+}
+
+.main-header .language-selection{
+ display: flex;
+ align-items: center;
+}
+.main-header .language-selection img{
+  width: 9%;
+  border-radius: 50%;
+}
+.main-header .language-selection span{
+    line-height: 1;
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: 600;
 }

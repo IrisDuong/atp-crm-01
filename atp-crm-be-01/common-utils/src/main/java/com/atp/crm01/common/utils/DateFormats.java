@@ -10,7 +10,6 @@ public enum DateFormats {
 	
 	private final String pattern;
 	private DateFormats(String pattern) {
-		// TODO Auto-generated constructor stub
 		this.pattern = pattern;
 	}
 	
