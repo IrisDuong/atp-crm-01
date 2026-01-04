@@ -1,4 +1,4 @@
-import AXIOS_INSTANCE from "../../util/rest.api";
+import AXIOS_INSTANCE from "../../util/axios.config";
 const { MICRO_SERVICE_PATH } = require("../../util/app.config");
 const { SETTING } = MICRO_SERVICE_PATH;
 

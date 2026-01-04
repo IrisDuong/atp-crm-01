@@ -18,7 +18,12 @@ public class SecurityConfig {
 	@Order(1)
 	public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
 		OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-		http.exceptionHandling(ex-> ex.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/signin")));
+		http
+		.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
+		.oidc(Customizer.withDefaults());
+		
+		http
+		.exceptionHandling(ex-> ex.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/oauth2/authorization/google")));
 		return http.build();
 	}
 	
@@ -27,8 +32,14 @@ public class SecurityConfig {
 	@Order(2)
 	public SecurityFilterChain oauth2ClientSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf->csrf.disable())
-		.authorizeHttpRequests(auth-> auth.requestMatchers("/signin","/oauth2/**").permitAll().anyRequest().authenticated())
-		.oauth2Login(Customizer.withDefaults());
+		.authorizeHttpRequests(auth-> auth.requestMatchers("/login","/oauth2/**").permitAll().anyRequest().authenticated())
+		.oauth2Login(Customizer.withDefaults())
+		.logout(logout->logout
+			.logoutUrl("/logout")
+			.logoutSuccessHandler((request,response,authentication)->{
+				response.sendRedirect(request.getParameter("post_logout_redirect_uri"));
+			})
+		);
 		return http.build();
 	}
 }

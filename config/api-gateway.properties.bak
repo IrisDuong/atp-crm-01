@@ -25,3 +25,9 @@ spring.security.oauth2.client.registration.gateway-client.scope=openid,profile,e
 spring.security.oauth2.client.registration.gateway-client.authorization-grant-type=authorization_code
 spring.security.oauth2.client.registration.gateway-client.provider=auth-server
 spring.security.oauth2.client.provider.auth-server.issuer-uri=${app.baseUrl.auth-server}
+
+
+#spring.security.oauth2.client.provider.auth-server.authorization-uri=${app.baseUrl.auth-server}/oauth2/authorize
+#spring.security.oauth2.client.provider.auth-server.jwk-set-uri=${app.baseUrl.auth-server}/jwks
+#spring.security.oauth2.client.provider.auth-server.token-uri=${app.baseUrl.auth-server}/oauth2/token
+#spring.security.oauth2.client.provider.auth-server.user-info-uri=${app.baseUrl.auth-server}/userinfo

@@ -45,11 +45,11 @@ public class GatewayConfig {
 	public RouteLocator routeLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route("AUTH-SSO-SERVICE", r-> r
-						.path("/auth-mgt/**")
+						.path("/auth-server/**")
 						.filters(f-> f
 								.stripPrefix(1)
 						 )
-						.uri("lb://auth-sso")
+						.uri("lb://auth-server")
 				)
 				.route("SETTING-SERVICE", r-> r
 						.path("/setting-mgt/**")

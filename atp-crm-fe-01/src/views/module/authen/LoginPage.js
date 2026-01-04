@@ -5,6 +5,7 @@ import { IoLogoGoogleplus } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 import {QRCodeCanvas} from 'qrcode.react'; // Make sure to install this: npm install qrcode.react
 import ATP_LOGO from "../../../public/images/atp_logo-01.png";
+import { doAuthentication } from "../../../service/auth/auth.service"
 const { Header, Content } = Layout;
 const LoginPage = () => {
   return (
@@ -39,6 +40,7 @@ const LoginPage = () => {
               icon={<FcGoogle />}
               size="large"
               onClick={() => {
+                doAuthentication();
               }}
             >
               Đăng nhập với Gmail

@@ -10,17 +10,24 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -31,29 +38,27 @@ import com.nimbusds.jose.proc.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-@Slf4j
+//@Slf4j
 public class AuthorizationServerConfig {
 
-	
-	@Value("${app.host.auth-server}")
+	@Value("${app.baseUrl.auth-server}")
 	private String authServerHost;
 	
-	@Value("${app.host.authserver}")
+	@Value("${app.baseUrl.gateway}")
 	private String gatewayHost;
 	
-	@Value("${sec.oauth2.gateway.client_id}")
+	@Value("${sec.oauth2.client.gateway.client_id}")
 	private String gatewayClientId;
 
-	@Value("${sec.oauth2.gateway.client_secret}")
+	@Value("${sec.oauth2.client.gateway.client_secret}")
 	private String gatewayClientSecret;
 	
-	@Value("${sec.oauth2.client.gateway.at.ttl}")
-	private long gatewayAccessTokenTtl;
+	@Value("${sec.oauth2.client.gateway.access-token.ttl}")
+	private long gatewayAccessTokenTTL;
 	
-	@Value("${sec.oauth2.client.gateway.rt.ttl}")
-	private long gatewayRefreshTokenTtl;
+	@Value("${sec.oauth2.client.gateway.refresh-token.ttl}")
+	private long gatewayRefreshTokenTTL;
 	
-
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -73,8 +78,8 @@ public class AuthorizationServerConfig {
 				.scope("profile")
 				.clientSettings(ClientSettings.builder().requireAuthorizationConsent(false).build())
 				.tokenSettings(TokenSettings.builder()
-						.accessTokenTimeToLive(Duration.ofMillis(gatewayAccessTokenTtl))
-						.refreshTokenTimeToLive(Duration.ofMillis(gatewayRefreshTokenTtl))
+						.accessTokenTimeToLive(Duration.ofMillis(gatewayAccessTokenTTL))
+						.refreshTokenTimeToLive(Duration.ofMillis(gatewayRefreshTokenTTL))
 						.build()
 				).build();
 		return new InMemoryRegisteredClientRepository(gatewayClient);
@@ -101,9 +106,32 @@ public class AuthorizationServerConfig {
 	}
 	
 	@Bean
-	public AuthorizationServerSettings authorizationServerConfig() {
+	public AuthorizationServerSettings authorizationServerSettings() {
+		System.out.println("authServerHost = "+authServerHost);
 		AuthorizationServerSettings settings = AuthorizationServerSettings.builder()
 				.issuer(authServerHost).build();
 		return settings;
+	}
+
+	@Bean
+	public OAuth2TokenCustomizer<JwtEncodingContext> jwtCustomizer(){
+		return context->{
+			if(OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())
+				|| OidcParameterNames.ID_TOKEN.equals(context.getTokenType().getValue())
+			) {
+				Authentication principal = context.getPrincipal();
+				if(principal instanceof OAuth2AuthenticationToken token) {
+					OAuth2User oAuth2User = token.getPrincipal();
+					String email = oAuth2User.getAttribute("email");
+					String name = oAuth2User.getAttribute("name");
+					String picture = oAuth2User.getAttribute("picture");
+					
+					context.getClaims().claim("email", email);
+					context.getClaims().claim("name", name);
+					context.getClaims().claim("picture", picture);
+					context.getClaims().claim("provider", "google");
+				}
+			}
+		};
 	}
 }

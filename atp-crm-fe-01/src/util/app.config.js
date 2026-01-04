@@ -2,8 +2,7 @@
 /**
  * be uri
  */
-export const SSO_AUTHEN_URL = 'http://localhost:9000'
-export const GATEWAY_URI = 'http://localhost:8080'
+export const BE_URI = 'http://localhost:8080'
 
 /**
  * Storage Keys
@@ -18,7 +17,8 @@ export const STORAGE_KEYS = {
  * Micro Service Path
  */
 export const MICRO_SERVICE_PATH = {
-    SETTING : '/setting-mgt',
+    SETTING: '/setting-mgt',
+    AUTH_SERVER: '/auth-server'
 }
 
 /**

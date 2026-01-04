@@ -1,48 +1,36 @@
-import { Space, Avatar ,Dropdown, Badge, Menu, Typography} from 'antd'
-import {
-  MailOutlined,
-  BellOutlined,
-  GlobalOutlined,
-  LogoutOutlined,
-  UserOutlined
-} from '@ant-design/icons';
-import { Header } from 'antd/es/layout/layout'
-import React from 'react'
-const { Text } = Typography;
+
+import { Space, Badge, Menu} from 'antd'
+import { IoMailUnreadOutline } from "react-icons/io5";
+import { RiNotification3Line } from "react-icons/ri";
+import { Header } from 'antd/es/layout/layout';
+import AuthenticationProfile from "./AuthenticationProfile";
+import MultiLanguage from './MultiLanguage';
+// import {} from "../../../store/auth/authSlice";
 function MainHeader() {
   return (
-    <Header
-        id='main-header'
-    >
+    <Header  className='main-header'>
         <div>
             ATP
         </div>
-        <Space size="large" align='center'>
-            
-            {/* Nhóm các logo chức năng */}
-            <Badge count={5} className="header-icon">
-                <MailOutlined style={{ fontSize: '18px' }} />
-            </Badge>
-            
-            <Badge count={12} className="header-icon">
-                <BellOutlined style={{ fontSize: '18px' }} />
-            </Badge>
-            
-            <Dropdown
-                overlay={
-                <Menu>
-                    <Menu.Item key="vi">Tiếng Việt</Menu.Item>
-                    <Menu.Item key="en">English</Menu.Item>
-                </Menu>
-                }
-                trigger={['click']}
-            >
-                <GlobalOutlined className="header-icon" style={{ fontSize: '18px', cursor: 'pointer' }} />
-            </Dropdown>
-            <Space align="center">
-                <Avatar style={{ backgroundColor: "#1890ff" }}>U</Avatar>
-                <Text strong>John Doe</Text>
-            </Space>
+        <Space align='right' style={{alignItems:"center"}}>
+            <div className="header-icon-container">
+                <div>
+                    <span>
+                        <Badge count={5} size="small">
+                            <IoMailUnreadOutline className="header-icon"/>
+                        </Badge>
+                    </span>
+                    <span>
+                        <Badge count={5} size="small">
+                            <RiNotification3Line className="header-icon"/>
+                        </Badge>
+                    </span>
+                    <span>
+                    </span>
+                </div>
+            </div>
+            <MultiLanguage/>
+            <AuthenticationProfile/>
         </Space>
     </Header>
   )
