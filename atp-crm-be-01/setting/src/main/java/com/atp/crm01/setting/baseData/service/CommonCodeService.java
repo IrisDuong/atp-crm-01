@@ -10,6 +10,6 @@ import com.atp.crm01.setting.baseData.entity.CommonCode;
 
 public interface CommonCodeService {
 
-	boolean createCommonCode(CommonCodeRequestDTO param);
+	boolean createCommonCode(CommonCodeRequestDTO param) throws Exception;
 	List<CommonCodeResponseDTO> searchCommonCodes(CommonCodeRequestDTO param);
 }

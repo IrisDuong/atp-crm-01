@@ -46,10 +46,11 @@ public class GeneralCodeServiceImpl implements GeneralCodeService{
 	private final CommonCodeRepo commonCodeRepo;
 	/**
 	 * Create single general code
+	 * @throws Exception 
 	 */
 	@Override
 	@Transactional
-	public boolean createGeneralCode(GeneralCodeRequestDTO param) {
+	public boolean createGeneralCode(GeneralCodeRequestDTO param) throws Exception {
 		
 		try {
 			// find the owner common code
@@ -68,7 +69,7 @@ public class GeneralCodeServiceImpl implements GeneralCodeService{
 			return true;
 		} catch (Exception e) {
 			log.error("[GeneralCodeServiceImpl] - create SINGLE  general code failed");
-			return false;
+			throw new Exception("Create general code failed");
 		}
 	}
 

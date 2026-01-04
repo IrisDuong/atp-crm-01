@@ -49,7 +49,7 @@ public class CommonCodeServiceImpl implements CommonCodeService{
 
 	@Override
 	@Transactional
-	public boolean createCommonCode(CommonCodeRequestDTO param) {
+	public boolean createCommonCode(CommonCodeRequestDTO param) throws Exception {
 		
 		if(commonCodeRepo.existsById(param.getCommonCodeNo())) {
 			log.info("DUPLICATE COMMON CODE NO  = {}", param.getCommonCodeNo());
@@ -70,7 +70,7 @@ public class CommonCodeServiceImpl implements CommonCodeService{
 			commonCodeRepo.save(commonCodeToSave);
 			return true;
 		} catch (Exception e) {
-			return false;
+			throw new Exception("Create common code failed");
 		}
 	}
 
