@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
@@ -54,6 +56,7 @@ public class SecurityConfig {
 	    source.registerCorsConfiguration("/**", config);
 	    return source;
 	}
+	
 	@Bean
 	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 		return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
@@ -68,6 +71,14 @@ public class SecurityConfig {
 						.anyExchange().authenticated()
 				)
 				.oauth2Login(oauth2Login-> oauth2Login.authenticationSuccessHandler(oauth2AuthenSuccessHandler))
+				.oauth2ResourceServer(resourceServer-> resourceServer.jwt(Customizer.withDefaults()))
+				.build();
+	}
+	
+	@Bean
+	public ReactiveJwtDecoder jwtDecoder() {
+		return NimbusReactiveJwtDecoder
+				.withJwkSetUri(authServerHost.concat("/oauth2/jwks"))
 				.build();
 	}
 }

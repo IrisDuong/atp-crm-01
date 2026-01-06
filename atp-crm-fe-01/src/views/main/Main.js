@@ -32,7 +32,7 @@ function Main() {
     }
   }
 
-  const checkLogoutSuccess = ()=>{
+  const checkLogout = ()=>{
     console.log("[LOGOUT] :  START TO CLEAR AUTHEN INFO IN SORE AFTER LOGOUT FROM BACK-END")
     const isLogoutParams = searchParams.get("isLogout");
     if(isLogoutParams){
@@ -46,7 +46,7 @@ function Main() {
   },[])
 
   useEffect(()=>{
-    checkLogoutSuccess();
+    checkLogout();
   },[searchParams])
   /**
    * render

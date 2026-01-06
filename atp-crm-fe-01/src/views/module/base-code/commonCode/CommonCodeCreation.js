@@ -7,7 +7,7 @@ import FloatingLabelInput from '../../../common/FloatingLabelInput';
 import {closeModal} from "../../../../store/common/modalSlice"
 import { modalStateKey } from '../../../../util/modal.util';
 import {langCodeDef} from '../../../../util/app.config';
-import {createCommonCode, searchListCommonCode} from "../../../../service/setting/setting.service"
+import { createCommonCode } from '../../../../service/setting/base-data/commonCode.service';
 const {Title, Text} = Typography;
 
 function CommonCodeCreation() {
