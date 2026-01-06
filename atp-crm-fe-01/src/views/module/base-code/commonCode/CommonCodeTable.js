@@ -12,7 +12,7 @@ function CommonCodeTable() {
     
     const dispatch = useDispatch();
     const {listCommonCodes} = useSelector(state=> state.commonCodeStore);
-    const [commonCodeData, setCommonCodeData] = useState([]);
+    const [commonCodeTbData, setCommonCodeTbData] = useState([]);
     
     const [codeTypeSelection, setCodeTypeSelection] = useState([
         { value: 'M', label: 'Multi' },
@@ -151,57 +151,34 @@ function CommonCodeTable() {
     
     /** events */
     const handleChangeDisplayMode = (record,mode) => {
-        var editableList = commonCodeData.map(item=> {
+        var editableList = commonCodeTbData.map(item=> {
             if(item.key == record.key && item.editable != mode) item.editable = mode;
             return item;
         })
-       setCommonCodeData(editableList)
+       setCommonCodeTbData(editableList)
     }
 
     const handleViewGeneralCodes = record =>{
         dispatch(openModal(modalStateKey.GENERAL_CODE_LIST));
     }
     useEffect(()=>{
-        // const listCommonCodes = Array.from({length:15}).map((_,i)=>{
-        //     return {
-        //                 key:`${i}`,
-        //                 commonCodeName: "",
-        //                 commonCodeNo: `${i} - commonCodeNo`,
-        //                 codeTypeName: `${i} - codeTypeName`,
-        //                 useYnName: `${i} - useYnName`,
-        //                 groupCodeNo: `INV`,
-        //                 codeTypeNo:  `M`,
-        //                 useYnNo:  `N`,
-        //                 editable : false,
-        //                 localeInputCodes:[
-        //                     {
-        //                         "langCode":"en",
-        //                         "codeName":`${i} - commonCodeName`
-        //                     },
-        //                     {
-        //                         "langCode":"en",
-        //                         "codeName":`${i} - mã`
-        //                     }
-        //                 ]
-        //     }
-        // });
         if(listCommonCodes && listCommonCodes.length > 0){
-            const newCommonCodes = listCommonCodes && listCommonCodes.map(item=>{
-                const codeNames = item.localeInputCodes.filter(locale=> locale.langCode === CURRENT_LANG_CODE);
+            let _listCommonCodes = listCommonCodes.map(e=>{
+                let localeInputCodes = e.localeInputCodes.filter(k=> k.langCode === CURRENT_LANG_CODE);
                 return {
-                        key:  item.key,
-                        commonCodeName: codeNames && codeNames.length > 0 ? codeNames[0].codeName : "",
-                        commonCodeNo: item.commonCodeNo,
-                        codeTypeName: item.codeTypeName,
-                        useYnName: item.useYnName,
-                        groupCodeNo: item.groupCodeNo,
-                        codeTypeNo: item.codeTypeNo,
-                        useYnNo: item.useYnNo,
-                        editable : false
-            }})
-            setCommonCodeData(newCommonCodes);
+                    commonCodeNo: e.commonCodeNo,
+                    featureCodeNo: e.featureCodeNo,
+                    codeTypeNo: e.codeType.codeTypeNo,
+                    codeTypeValue: e.codeType.codeTypeValue,
+                    useStatusNo: e.useStatus.useStatusNo,
+                    useStatusValue: e.useStatus.useStatusValue,
+                    commonCodeName: localeInputCodes && localeInputCodes.length > 0 ? localeInputCodes[0].codeName:""
+                }
+            
+            })
+        setCommonCodeTbData(_listCommonCodes);
         }
-    },[])
+    },[listCommonCodes])
     
         // const handleChangePagination = (page, pageSize) => {
         //     console.log('Page:', page, 'PageSize:', pageSize);
@@ -211,7 +188,7 @@ function CommonCodeTable() {
     <>
         <Table 
             columns={cols} 
-            dataSource={commonCodeData}
+            dataSource={commonCodeTbData}
             pagination={{ pageSize: 5}}
             rowKey="key"
             bordered

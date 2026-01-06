@@ -3,8 +3,8 @@ import {useDispatch} from "react-redux"
 import {Form, Table, Space, Button, Input, Select, Flex, Typography, Tooltip} from 'antd';
 import { RiSearch2Line } from "react-icons/ri";
 import FloatingLabelInput from '../../../common/FloatingLabelInput';
-import { searchListCommonCode } from '../../../../service/setting/setting.service';
-import {getListCommonCodes} from "../../../../store/base-data/commonCodeSlice"
+import { searchListCommonCode } from '../../../../service/setting/base-data/commonCode.service';
+import {storeListCommonCodes} from "../../../../store/base-data/commonCodeSlice"
 function CommonCodeSearch() {
       const dispatch = useDispatch();
       const codeTypes = [
@@ -24,38 +24,46 @@ function CommonCodeSearch() {
       ]
       const [searchParams, setSearchParams] = useState({
           commonCodeName: '',
-          groupCodeNo: groupCodes[0].value,
+          featureCodeNo: groupCodes[0].value,
           codeTypeNo: codeTypes[0].value,
-          useYnNo: useYns[0].value
+          useStatusNo: useYns[0].value
       });
       
       
       /** events */
-      const handleChangeSelection = value =>{
-          console.log(value);
+      const handleFormChange = feEl =>{
+          const {feName,feValue} = feEl;
+          setSearchParams(prevState=>{
+            return {
+              ...prevState,[feName]:feValue
+            }
+          })
       }
 
       const handleSearch = async () => {
+        console.log("param search common code");
+        console.log(searchParams);
           const result = await searchListCommonCode(searchParams);
-          
+          if(result)
+            dispatch(storeListCommonCodes(result));
       }
       return (
         <>
           <Form layout="inline" className='search-form'>
               <FloatingLabelInput
-                name="groupCodeNo"
+                name="featureCodeNo"
                 type="select"
                 label="Features Group"
-                defaultValue={searchParams.groupCodeNo}
-                onChange={handleChangeSelection}
+                defaultValue={searchParams.featureCodeNo}
+                onChange={handleFormChange}
                 data={groupCodes}
               />
               <FloatingLabelInput
                 name="commonCodeName"
                 type="input"
                 label="Common Code Name"
-                defaultValue=""
-                onChange={()=>{}}
+                value={searchParams.commonCodeName}
+                onChange={handleFormChange}
                 placeholder="Input Common Name"
               />
               <FloatingLabelInput
@@ -63,15 +71,15 @@ function CommonCodeSearch() {
                 type="select"
                 label="Type"
                 defaultValue={searchParams.codeTypeNo}
-                onChange={handleChangeSelection}
+                onChange={handleFormChange}
                 data={codeTypes}
               />
               <FloatingLabelInput
-                name="useYnNo"
+                name="useStatusNo"
                 type="select"
                 label="Use Y/N"
-                defaultValue={searchParams.useYnNo}
-                onChange={handleChangeSelection}
+                defaultValue={searchParams.useStatusNo}
+                onChange={handleFormChange}
                 data={useYns}
               />
             <Form.Item>

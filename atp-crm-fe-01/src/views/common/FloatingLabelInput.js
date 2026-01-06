@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import { Input, Form, Select } from 'antd';
 
 const FloatingLabelInput = ({type,name, label, defaultValue, onChange ,placeholder,data}) => {
-
+    const handleChangeEvent = (e)=>{
+      let changedValue = e;
+      if(Object.hasOwn(e,"target") && e.target instanceof HTMLElement){
+        changedValue = e.target.value;
+      }
+      return onChange({feName:name,feValue:changedValue})
+    }
     const result =  ()=>{
         switch(type){
           case "select":
@@ -10,7 +16,7 @@ const FloatingLabelInput = ({type,name, label, defaultValue, onChange ,placehold
               <Form.Item>
                 <label for={name} class="outlined-label">{label}</label>
                 <Select
-                    onChange={onChange}
+                    onChange={handleChangeEvent}
                     defaultValue={defaultValue}
                     name={name}
                 >
@@ -30,8 +36,8 @@ const FloatingLabelInput = ({type,name, label, defaultValue, onChange ,placehold
                 <Input
                   name={name}
                   placeholder={placeholder}
-                  value={defaultValue}
-                  onChange={onChange}
+                  value={data}
+                  onChange={handleChangeEvent}
                 />
               </Form.Item>
             );

@@ -6,11 +6,11 @@ const commonCodeSlice = createSlice({
         listCommonCodes : []
     },
     reducers:{
-        getListCommonCodes : (state,action)=>{
+        storeListCommonCodes : (state,action)=>{
             state.listCommonCodes = action.payload;
         }
     }
 })
 
-export const {getListCommonCodes} = commonCodeSlice.actions;
+export const {storeListCommonCodes} = commonCodeSlice.actions;
 export default commonCodeSlice.reducer;
